@@ -15,17 +15,18 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         /*
-          Attempt to establish a connection to the database
-          Java try-with-resources will create a connection and
-          autoclose at the end of the try block
+         * Attempt to establish a connection to the database
+         * Java try-with-resources will create a connection and
+         * autoclose at the end of the try block
          */
         Properties props = new Properties();
         props.setProperty("user", "testUser");
         props.setProperty("password", "testPassword");
 
-        // The URL can be updated for other DBMSs (provided that a supported driver exists)
+        // The URL can be updated for other DBMSs (provided that a supported driver
+        // exists)
         try (Connection conn = DriverManager.getConnection("jdbc:h2:./database/h2_data_storage", props);
-             Scanner scanner = new Scanner(System.in)) {
+                Scanner scanner = new Scanner(System.in)) {
             int menu = -1;
 
             // Helper Classes for querying the H2 database using JDBC
@@ -41,46 +42,58 @@ public class App {
                 System.out.println("Please enter the number for the query you would like to run from the list below: ");
                 displayMenu();
                 menu = scanner.nextInt();
-                // When using nextInt, the entire buffer is not consumed... so ensure nothing is dangling
+                // When using nextInt, the entire buffer is not consumed... so ensure nothing is
+                // dangling
                 scanner.nextLine();
                 switch (menu) {
                     case 1:
                         System.out.println("You've selected to find all stores:");
-                        // TODO: Retrieve all stores using the storeHelper by replacing the Null assignment below
-                        queryResults = null;
+                        // TODO: Retrieve all stores using the storeHelper by replacing the Null
+                        // assignment below
+                        queryResults = storeHelper.findAll();
                         printResultRows(queryResults);
                         break;
                     case 2:
-                        System.out.println("You've selected to find a specific store number, please enter the store number:");
+                        System.out.println(
+                                "You've selected to find a specific store number, please enter the store number:");
                         /*
-                        TODO: Retrieve input from the user for the storeNumber to be queried
-                              Then retrieve all stores with the storeNumber by replacing the Null assignment below
+                         * TODO: Retrieve input from the user for the storeNumber to be queried
+                         * Then retrieve all stores with the storeNumber by replacing the Null
+                         * assignment below
                          */
+                        int storeToQuery = scanner.nextInt();
+                        scanner.nextLine();
 
-
-                        queryResults = null;
+                        queryResults = storeHelper.findByStoreNumber(storeToQuery);
                         printResultRows(queryResults);
                         break;
                     case 3:
-                        System.out.println("You've selected to find all stores with a specific store type, please enter the store type:");
+                        System.out.println(
+                                "You've selected to find all stores with a specific store type, please enter the store type:");
                         /*
-                        TODO: Retrieve input from the user for the store type to be queried
-                              Then retrieve all stores with the storeType by replacing the Null assignment below
+                         * TODO: Retrieve input from the user for the store type to be queried
+                         * Then retrieve all stores with the storeType by replacing the Null assignment
+                         * below
                          */
+                        String typeToQuery = scanner.nextLine();
 
-
-                        queryResults = null;
+                        queryResults = storeHelper.findByStoreType(typeToQuery);
                         printResultRows(queryResults);
                         break;
                     case 4:
-                        System.out.println("You've selected to find all stores with a specific city and state. Please enter the city:");
+                        System.out.println(
+                                "You've selected to find all stores with a specific city and state. Please enter the city:");
                         /*
-                        TODO: Retrieve input from the user for the city, then prompt the user for the state
-                              Then retrieve all stores within the city and state by replacing the Null assignment below
+                         * TODO: Retrieve input from the user for the city, then prompt the user for the
+                         * state
+                         * Then retrieve all stores within the city and state by replacing the Null
+                         * assignment below
                          */
+                        String cityToQuery = scanner.nextLine();
+                        System.out.println("Please enter the state");
+                        String stateToQuery = scanner.nextLine();
 
-
-                        queryResults = null;
+                        queryResults = storeHelper.findByCityAndState(cityToQuery, stateToQuery);
                         printResultRows(queryResults);
                         break;
                     case 5:
@@ -89,14 +102,16 @@ public class App {
                         printResultRows(queryResults);
                         break;
                     case 6:
-                        System.out.println("You've selected to find all coffees with a given coffee name: Please enter the name");
+                        System.out.println(
+                                "You've selected to find all coffees with a given coffee name: Please enter the name");
                         String coffeeNameToQuery = scanner.nextLine();
 
                         queryResults = coffeeHelper.findByName(coffeeNameToQuery);
                         printResultRows(queryResults);
                         break;
                     case 7:
-                        System.out.println("You've selected to find all coffees with a given intensity: Please enter the intensity");
+                        System.out.println(
+                                "You've selected to find all coffees with a given intensity: Please enter the intensity");
                         int coffeeIntensityToQuery = scanner.nextInt();
                         scanner.nextLine();
 
@@ -104,14 +119,16 @@ public class App {
                         printResultRows(queryResults);
                         break;
                     case 8:
-                        System.out.println("You've selected to find all coffees within a given price range: Please enter the lower price of the range");
+                        System.out.println(
+                                "You've selected to find all coffees within a given price range: Please enter the lower price of the range");
                         double lowerPriceBound = scanner.nextDouble();
                         scanner.nextLine();
                         System.out.println("Please enter the upper price of the range");
                         double upperPriceBound = scanner.nextDouble();
                         scanner.nextLine();
 
-                        queryResults = coffeeHelper.findCoffeeInPriceRange(BigDecimal.valueOf(lowerPriceBound), BigDecimal.valueOf(upperPriceBound));
+                        queryResults = coffeeHelper.findCoffeeInPriceRange(BigDecimal.valueOf(lowerPriceBound),
+                                BigDecimal.valueOf(upperPriceBound));
                         printResultRows(queryResults);
                         break;
                     case 9:
@@ -121,7 +138,8 @@ public class App {
                         printResultRows(queryResults);
                         break;
                     case 10:
-                        System.out.println("You've selected to find all receipts with a given receiptID: Please enter the receiptID");
+                        System.out.println(
+                                "You've selected to find all receipts with a given receiptID: Please enter the receiptID");
                         int receiptIDToQuery = scanner.nextInt();
                         scanner.nextLine();
 
@@ -129,21 +147,24 @@ public class App {
                         printResultRows(queryResults);
                         break;
                     case 11:
-                        System.out.println("You've selected to find all receipts for a given storeNumber: Please enter the storeNumber");
+                        System.out.println(
+                                "You've selected to find all receipts for a given storeNumber: Please enter the storeNumber");
                         int storeNumberToQuery = scanner.nextInt();
                         scanner.nextLine();
                         queryResults = receiptHelper.findByStoreNumber(storeNumberToQuery);
                         printResultRows(queryResults);
                         break;
                     case 12:
-                        System.out.println("You've selected to find all receipts for a given coffeeID. Please enter the coffeeID");
+                        System.out.println(
+                                "You've selected to find all receipts for a given coffeeID. Please enter the coffeeID");
                         int coffeeIDToQuery = scanner.nextInt();
                         scanner.nextLine();
                         queryResults = receiptHelper.findByCoffeeID(coffeeIDToQuery);
                         printResultRows(queryResults);
                         break;
                     case 13:
-                        System.out.println("You've selected to find all receipts within a given quantity range. Please enter the lower quantity of the range");
+                        System.out.println(
+                                "You've selected to find all receipts within a given quantity range. Please enter the lower quantity of the range");
                         int lowerQuantity = scanner.nextInt();
                         scanner.nextLine();
                         System.out.println("Please enter the upper quantity of the range");
@@ -157,7 +178,8 @@ public class App {
                         System.out.println("You've selected to find all receipts within a given date range.\n" +
                                 "Please enter the lower date of the range using the following format: YYYY-MM-DD");
                         String lowerRange = scanner.nextLine();
-                        System.out.println("Please enter the upper date of the range using the following format: YYYY-MM-DD");
+                        System.out.println(
+                                "Please enter the upper date of the range using the following format: YYYY-MM-DD");
                         String upperRange = scanner.nextLine();
 
                         // Convert Strings to Date type
@@ -212,12 +234,12 @@ public class App {
         // Print the name of the table beforehand
         if (!queryResults.isEmpty()) {
             String tableName;
-            if (queryResults.getFirst() instanceof Store) {
+            if (queryResults.get(0) instanceof Store) {
                 tableName = """
                         +----------------------------------------------------------------+
                         |                             Store                              |
                         +----------------------------------------------------------------+""";
-            } else if (queryResults.getFirst() instanceof Coffee) {
+            } else if (queryResults.get(0) instanceof Coffee) {
                 tableName = """
                         +----------------------------------------------------------------+
                         |                             Coffee                             |
